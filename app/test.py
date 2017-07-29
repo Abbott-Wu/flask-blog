@@ -7,6 +7,7 @@ from flask_migrate import Migrate, MigrateCommand
 from flask_mail import Mail, Message
 from wtforms import StringField, SubmitField
 from wtforms.validators import Required
+from threading import Thread
 import os
 
 # 初始化部分
@@ -16,11 +17,15 @@ app.config['SECRET_KEY'] = '8cd9fa38-6467-426e-a685-7c9f1f937864'
 app.config['SQLALCHEMY_DATABASE_URI'] =\
     'sqlite:///' + os.path.join(basedir, 'data.sqlite')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+# 邮件
+app.config['FLASK_MAIL_SUBJECT_PREFIX'] = '[flasky]'
+app.config['FLASKY_MAIL_SENDER'] = 'Flasky Admin <wu13231423396@outlook.com>'
 app.config['MAIL_SERVER'] = 'smtp-mail.outlook.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
 app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
+app.config['FLASKY_ADMIN'] = os.environ.get('FLASKY_ADMIN')
 # 定义/声明分界线
 bootstrap = Bootstrap(app)
 db = SQLAlchemy(app)
@@ -36,11 +41,24 @@ def make_shell_context():
     return dict(app=app, db=db, User=User, Role=Role)
 
 
-# 函数/实现分界线
 manager.add_command("shell", Shell(make_context=make_shell_context))
 manager.add_command('db', MigrateCommand)
 # 命令行部分
 
+# 邮件部分
+def send_async_email(app,msg):
+    with app.app_context():
+        mail.send(msg)
+
+def send_email(to, subject, template, **kwargs):
+    msg = Message(app.config['FLASK_MAIL_SUBJECT_PREFIX'] + subject,
+                  sender=app.config['FLASKY_MAIL_SENDER'], recipients=[to])
+    msg.body = render_template(template + '.txt', **kwargs)
+    msg.html = render_template(template + '.html.j2', **kwargs)
+    thr = Thread(target=send_async_email,args=[app,msg])
+    thr.start()
+    return thr
+# 邮件部分
 # 数据库部分
 
 
@@ -97,6 +115,9 @@ def TryWTF():
             user = User(username=form.name.data)
             db.session.add(user)
             session['known'] = False
+            if app.config['FLASKY_ADMIN']:
+                send_email(app.config['FLASKY_ADMIN'],
+                           'New User', 'mail/new_user', user=user)
         session['name'] = form.name.data
         form.name.data = ''
         return redirect(url_for('TryWTF'))

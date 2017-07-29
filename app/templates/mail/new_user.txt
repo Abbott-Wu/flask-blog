@@ -1,0 +1,1 @@
+<p><h1>Hi,their is new user called {{ user.username }}</h1></p>
