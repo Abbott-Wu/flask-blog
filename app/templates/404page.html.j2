@@ -1,0 +1,37 @@
+{% extends "base.html.j2" %}
+{% block title %}404-页面不存在 Abbott's Blog{% endblock %}
+{% block main %}
+<div class='col-lg-8 '>
+    <h1>抱歉，您要找的页面不存在</h1>
+    <br>
+    <hr>
+    <br>
+</div>
+
+
+<div class="container wow fadeIn" data-wow-delay='0.4s'>
+    <h1>您可以</h1>
+    <hr>
+    <div class='col-lg-5'>
+        <div class="widget-wrapper wow fadeIn" data-wow-delay="0.6s">
+            <h3>分类:</h3>
+            <br>
+            <div class="list-group">
+                <a href="#" class="list-group-item active">生活节奏</a>
+                <a href="#" class="list-group-item">音乐</a>
+                <a href="#" class="list-group-item">旅行</a>
+                <a href="#" class="list-group-item">时尚</a>
+                <a href="#" class="list-group-item">聚会</a>
+            </div>
+        </div>
+    </div>
+    <br>
+    <strong><h1>或者</h1></strong>
+    <hr><br>
+    <div class="col-lg-4 wow fadeIn" data-wow-delay="1.0s">
+        <h2>点击<strong><a href={{ url_for('index') }}>这里</a></strong>返回主页</h2>
+    </div>
+</div>
+
+
+{% endblock %}
