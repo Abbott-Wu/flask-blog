@@ -16,9 +16,9 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = '8cd9fa38-6467-426e-a685-7c9f1f937864'
 app.config['SQLALCHEMY_DATABASE_URI'] =\
     'sqlite:///' + os.path.join(basedir, 'data.sqlite')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # 邮件
-app.config['FLASK_MAIL_SUBJECT_PREFIX'] = '[flasky]'
+app.config['FLASKY_MAIL_SUBJECT_PREFIX'] = '[flasky]'
 app.config['FLASKY_MAIL_SENDER'] = 'Flasky Admin <wu13231423396@outlook.com>'
 app.config['MAIL_SERVER'] = 'smtp-mail.outlook.com'
 app.config['MAIL_PORT'] = 587
@@ -46,16 +46,19 @@ manager.add_command('db', MigrateCommand)
 # 命令行部分
 
 # 邮件部分
-def send_async_email(app,msg):
+
+
+def send_async_email(app, msg):
     with app.app_context():
         mail.send(msg)
 
+
 def send_email(to, subject, template, **kwargs):
-    msg = Message(app.config['FLASK_MAIL_SUBJECT_PREFIX'] + subject,
+    msg = Message(app.config['FLASKY_MAIL_SUBJECT_PREFIX'] + subject,
                   sender=app.config['FLASKY_MAIL_SENDER'], recipients=[to])
     msg.body = render_template(template + '.txt', **kwargs)
     msg.html = render_template(template + '.html.j2', **kwargs)
-    thr = Thread(target=send_async_email,args=[app,msg])
+    thr = Thread(target=send_async_email, args=[app, msg])
     thr.start()
     return thr
 # 邮件部分
@@ -114,6 +117,7 @@ def TryWTF():
         else:
             user = User(username=form.name.data)
             db.session.add(user)
+            db.session.commit()
             session['known'] = False
             if app.config['FLASKY_ADMIN']:
                 send_email(app.config['FLASKY_ADMIN'],
