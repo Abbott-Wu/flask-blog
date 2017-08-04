@@ -2,7 +2,7 @@
 {% block title %}404-页面不存在 Abbott's Blog{% endblock %}
 {% block main %}
 <div class='col-lg-8 '>
-    <h1>抱歉，您要找的页面不存在</h1>
+    {% block massage %}<h1>抱歉，您要找的页面不存在</h1>{% endblock %}
     <br>
     <hr>
     <br>
@@ -29,7 +29,7 @@
     <strong><h1>或者</h1></strong>
     <hr><br>
     <div class="col-lg-4 wow fadeIn" data-wow-delay="1.0s">
-        <h2>点击<strong><a href={{ url_for('index') }}>这里</a></strong>返回主页</h2>
+        <h2>点击<strong><a href={{ url_for('main.index') }}>这里</a></strong>返回主页</h2>
     </div>
 </div>
 
