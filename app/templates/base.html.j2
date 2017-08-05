@@ -10,7 +10,10 @@
   <title>{% block title %}{% endblock %}</title>
 
   <!-- Font google -->
-  <link href="https://fonts.fengqi.me/css?family=Noto+Sans|Roboto" rel="stylesheet">
+  <!-- <link href="https://fonts.fengqi.me/css?family=Noto+Sans|Roboto" rel="stylesheet"> -->
+
+  <!-- Font awesome -->
+  <!-- <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"> -->
 
   <!-- Bootstrap core CSS -->
   <link href='{{ url_for ("static", filename = "css/bootstrap.min.css") }}' rel="stylesheet">
@@ -89,6 +92,13 @@
           <form class="form-inline waves-effect waves-light">
             <input class="form-control" type="text" placeholder="Search">
           </form>
+          <ul class='nav navbar-nav navbar-right'>
+            {% if current_user.is_authenticated %}
+              <li class="nav-item nav-link"><a href="{{ url_for('auth.logout') }}"><i class="fa fa-sign-out" aria-hidden="true"></i> 退出</a></li>
+            {% else %}
+              <li class="nav-item nav-link"><a href="{{ url_for('auth.login') }}"><i class="fa fa-sign-in" aria-hidden="true"></i> 登录</a></li>
+            {% endif %}
+          </ul>
         </div>
       </div>
     </nav>

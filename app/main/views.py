@@ -1,15 +1,16 @@
 from datetime import datetime
 from flask import render_template, session, redirect, url_for
-
+from flask_login import current_user
 
 from . import main
 from .forms import TryFrom
 from .. import db
 from ..models import User
 
+
 @main.route('/')
 def index():
-    return render_template('home.html.j2')
+    return render_template('home.html.j2', current_user=current_user)
 
 
 @main.route('/try', methods=['GET', 'POST'])
@@ -33,4 +34,5 @@ def TryWTF():
     return render_template('flask-wtfTry.html.j2',
                            form=form, name=session.get('name'),
                            known=session.get('known', False),
-                           current_time=datetime.utcnow())
+                           current_time=datetime.utcnow(),
+                           current_user=current_user)

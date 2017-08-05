@@ -6,7 +6,11 @@
 
   <!--Main column-->
   <div class="col-lg-8">
-
+    {% if current_user.is_authenticated %}
+      <h1>{{current_user.username}}</h1>
+    {% else %}
+      <h1>stranger</h1>
+    {% endif %}
     <!--Post-->
     <div class="post-wrapper wow fadeIn" data-wow-delay="0.2s">
       <!--Post data-->
@@ -17,7 +21,7 @@
 
       <!--Featured image -->
       <div class="view overlay hm-white-light z-depth-1-half">
-        <img src="https://storage.googleapis.com/material-design/publish/material_v_11/assets/0Bx4BSt6jniD7Y1huOXVQdlFPMmM/materialdesign_introduction.png" class="img-fluid " alt="">
+        <!-- <img src="https://storage.googleapis.com/material-design/publish/material_v_11/assets/0Bx4BSt6jniD7Y1huOXVQdlFPMmM/materialdesign_introduction.png" class="img-fluid " alt=""> -->
         <a href="">
           <div class="mask">
           </div>

@@ -19,10 +19,18 @@
       <!--Body-->
       <div class="md-form">
         <i class="prefix"></i> {{ form.name(id = "form2",class="form-control",required="") }} {{ form.name.label(class="control-label",for = "form2") }}
+
+      </div>
+      
+      <div class="text-center checkbox">
+        <label>
+          <input type="checkbox" value="">
+          Option one is this and that&mdash;be sure to include why it's great
+        </label>
       </div>
 
       <div class="text-center">
-        <button class="btn btn-deep-purple">Login</button>
+        {{ form.submit( class='btn btn-primary') }}
       </div>
       <!--/Form with header-->
     </div>
@@ -32,5 +40,6 @@
       <p>happy to meet you</p>
     {% endif %}
   </div>
+
 </form>
 {% endblock %}
