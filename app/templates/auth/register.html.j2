@@ -1,0 +1,44 @@
+{% extends "base.html.j2" %}
+{% block title %} 注册 Abbott's Blog {% endblock %}
+{% block main %}
+<form method="POST">
+  {{ form.hidden_tag() }}
+  <div class="card">
+    <div class="card-block">
+      <div class="text-center form-header blue darken-4">
+        <h3><i class="fa fa-lock"></i>
+          登录</h3>
+      </div>
+
+      <div class="md-form form-group">
+        <i class="fa fa-envelope prefix"></i>
+        {{ form.email(id="form_email",class="form-control",required="",type="email",maxlength="64") }}
+        {{ form.email.label(for="form_email")}}
+      </div>
+
+      <div class="md-form form-group">
+        <i class="fa fa-envelope prefix"></i>
+        {{ form.username(id="form_username",class="form-control",required="",pattern="^\w+$",
+                         maxlength="20",title="Username should only contain lowercase letters. e.g. john") }}
+        {{ form.username.label(for="form_username")}}
+      </div>
+
+      <div class="md-form form-group">
+        <i class="fa fa-lock prefix"></i>
+        {{ form.password(id="form_password",class="form-control",required="") }}
+        {{ form.password.label(for="form_password") }}
+      </div>
+
+      <div class="md-form form-group">
+        <i class="fa fa-lock prefix"></i>
+        {{ form.password2(id="form_password2",class="form-control",required="") }}
+        {{ form.password2.label(for="form_password2") }}
+      </div>
+      <div class="md-form form-group text-center">
+        {{ form.submit(class="btn btn-primary btn-lg") }}
+      </div>
+
+    </div>
+  </div>
+</form>
+{% endblock %}

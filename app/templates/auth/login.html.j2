@@ -32,7 +32,9 @@
         <!-- <a class="btn btn-primary btn-lg">Login</a> -->
         {{ form.submit(class="btn btn-primary btn-lg") }}
       </div>
-
+      <div class="container">
+        <p>新用户？ 请点击这里 <a href="{{ url_for('auth.register') }}">注册</a></p>
+      </div>
     </div>
   </div>
 </form>

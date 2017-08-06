@@ -1,0 +1,10 @@
+{% extends "base.html.j2" %}
+{% block title %}
+  确认 Abbott Wu's Blog
+{% endblock %}
+{% block main %}
+  <h1>确认您的账户</h1>
+  <hr>
+  <p>已经有一封邮件送到了您的邮箱里，请先确认后再进入网张</p>
+  <p>您没有收到？<a href='{{ url_for('auth.resend_confirmation') }}'>点击这里</a>重新发送邮件</p>
+{% endblock %}
