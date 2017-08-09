@@ -10,7 +10,7 @@ from ..models import User
 
 @main.route('/')
 def index():
-    return render_template('home.html.j2', current_user=current_user)
+    return render_template('home.html.j2')
 
 
 @main.route('/try', methods=['GET', 'POST'])
@@ -34,5 +34,4 @@ def TryWTF():
     return render_template('flask-wtfTry.html.j2',
                            form=form, name=session.get('name'),
                            known=session.get('known', False),
-                           current_time=datetime.utcnow(),
-                           current_user=current_user)
+                           current_time=datetime.utcnow())

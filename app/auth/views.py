@@ -81,12 +81,24 @@ def unconfirmed():
         return redirect(url_for('main.index'))
     return render_template('auth/unconfirmed.html.j2')
 
+# -----------------------------------------------------------------------------
+
+
+def send_token_email(title, flash_massage, template, current_user=current_user):
+    token = current_user.generate_confirmation_token()
+    send_email(current_user.email, title,
+               template, user=current_user, token=token)
+    flash(flash_massage)
+
 
 @auth.route('/confirm')
 @login_required
 def resend_confirmation():
-    token = current_user.generate_confirmation_token()
-    send_email(current_user.email, '确认你的账户',
-               'auth/email/confirm', user=current_user, token=token)
-    flash('一份新的邮件已经被送到你的邮箱里了')
+    send_token_email('确认你的账户', '一份新的邮件已经被送到你的邮箱里了', 'auth/email/confirm')
     return redirect(url_for('main.index'))
+
+
+@auth.route('/manage')
+@login_required
+def manage_auth():
+    return render_template('auth/manage.html.j2')

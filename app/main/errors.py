@@ -5,9 +5,9 @@ from . import main
 
 @main.app_errorhandler(404)
 def page_not_found(e):
-    return render_template('404page.html.j2',current_user=current_user), 404
+    return render_template('404page.html.j2'), 404
 
 
 @main.app_errorhandler(500)
 def page_not_found(e):
-    return render_template('500page.html.j2',current_user=current_user), 500
+    return render_template('500page.html.j2'), 500
