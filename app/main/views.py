@@ -1,31 +1,49 @@
 from datetime import datetime
-from flask import render_template, session, redirect, url_for, flash
+from flask import render_template, session, redirect, url_for, flash, current_app, request
 from flask_login import current_user
+from flask_sqlalchemy import Pagination
 
 from . import main
-from .forms import TryFrom,PostForm
+from .forms import TryFrom, PostForm
 from .. import db
-from ..models import User,Permission,Post
+from ..models import User, Permission, Post
 from ..decorators import admin_required
 
 
 @main.route('/')
 def index():
-    return render_template('home.html.j2')
+    page = request.args.get('Page')
+    pagination = Post.query.order_by(Post.timestamp.desc()).paginate(
+        page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'],
+        error_out=False)
+    posts = pagination.items
+    return render_template('home.html.j2', posts=posts,
+                           current_time=datetime.utcnow(),
+                           pagination=pagination)
 
-@main.route('/edit', methods=['GET','POST'])
+
+@main.route('/edit', methods=['GET', 'POST'])
 @admin_required
 def edit():
     form = PostForm()
     if current_user.can(Permission.WRITE_ARTICLES) and \
             form.validate_on_submit():
-        post=Post(body=form.body.data,
+        post = Post(body=form.body.data,
+                    title=form.main_title.data,
+                    second_title=form.second_title.data,
+                    img=form.img.data,
+                    first_look=form.first_look.data,
                     author=current_user._get_current_object())
         db.session.add(post)
         db.session.commit()
         flash('文章已经提交')
-        return render_template('home.html.j2')
-    return render_template('edit.html.j2',form=form)
+        return redirect(url_for('main.index'))
+    return render_template('edit.html.j2', form=form)
+
+@main.route('/post/<int:id>')
+def post(id):
+    post=Post.query.get_or_404(id)
+    return render_template('post.html.j2', post=post)
 
 @main.route('/try', methods=['GET', 'POST'])
 def TryWTF():
