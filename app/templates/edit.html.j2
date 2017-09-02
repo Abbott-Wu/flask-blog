@@ -1,0 +1,18 @@
+ {% extends "base.html.j2" %}
+ {% block title %} 编辑文章 {% endblock %}
+ {% block main %}
+ <form method="POST">
+   {{ form.hidden_tag() }}
+   <div class="col-lg-8">
+     <h1 class="title">编辑文章</h1>
+   </div>
+   <hr><br>
+   <div class="col-lg-8 md-form">
+     {{ form.body(id="form_body",class="md-textarea",width="auto",required="") }}
+     {{ form.body.label(for="form_body")}}
+     <br>
+     <br>
+     {{ form.submit(class="btn btn-primary btn-lg")}}
+   </div>
+ </form>
+ {% endblock %}

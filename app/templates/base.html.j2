@@ -77,9 +77,9 @@
             <li class="nav-item">
               <a class="nav-link">学校记事</a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a class="nav-link">开发杂谈</a>
-            </li>
+            </li> -->
             <li class="nav-item dropdown btn-group">
               <a class="nav-link dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">资料库</a>
               <div class="dropdown-menu dropdown" aria-labelledby="dropdownMenu1">
@@ -95,6 +95,7 @@
           <ul class='nav navbar-nav navbar-right'>
             {% if current_user.is_authenticated %}
               <li class="nav-item nav-link"><a href="{{ url_for('auth.logout') }}"><i class="fa fa-sign-out" aria-hidden="true"></i> 退出</a></li>
+              <li class="nav-item nav-link"><a href="{{ url_for('main.edit') }}">写作</a></li>
             {% else %}
               <li class="nav-item nav-link"><a href="{{ url_for('auth.login') }}"><i class="fa fa-sign-in" aria-hidden="true"></i> 登录</a></li>
             {% endif %}

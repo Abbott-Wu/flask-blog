@@ -1,17 +1,31 @@
 from datetime import datetime
-from flask import render_template, session, redirect, url_for
+from flask import render_template, session, redirect, url_for, flash
 from flask_login import current_user
 
 from . import main
-from .forms import TryFrom
+from .forms import TryFrom,PostForm
 from .. import db
-from ..models import User
+from ..models import User,Permission,Post
+from ..decorators import admin_required
 
 
 @main.route('/')
 def index():
     return render_template('home.html.j2')
 
+@main.route('/edit', methods=['GET','POST'])
+@admin_required
+def edit():
+    form = PostForm()
+    if current_user.can(Permission.WRITE_ARTICLES) and \
+            form.validate_on_submit():
+        post=Post(body=form.body.data,
+                    author=current_user._get_current_object())
+        db.session.add(post)
+        db.session.commit()
+        flash('文章已经提交')
+        return render_template('home.html.j2')
+    return render_template('edit.html.j2',form=form)
 
 @main.route('/try', methods=['GET', 'POST'])
 def TryWTF():
