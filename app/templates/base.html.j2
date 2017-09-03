@@ -3,6 +3,7 @@
 <html lang="zh_CN">
 
 <head>
+  {% block head %}
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -49,15 +50,17 @@
     }
   </style>
   <script>
-    function turnoff(obj) {
-      document.getElementById(obj).style.display = "none";
-    }
+  function turnoff(obj) {
+    document.getElementById(obj).style.display = "none";
+  }
   </script>
+  {% endblock %}
+  <link rel="shortcut icon" href="{{ url_for('static',filename='web_hi_res_512.ico') }}" type="image/x-icon">
+  <link rel="icon" href="{{ url_for('static',filename='web_hi_res_512.ico') }}" type="image/x-cion">
 </head>
 
 <body>
-
-
+  <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
   <header>
 
     <!--Navbar-->
@@ -74,28 +77,29 @@
             <li class="nav-item active">
               <a class="nav-link" href="{{ url_for('main.index') }}">主页 <span class="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link">学校记事</a>
-            </li>
+            <!-- <li class="nav-item">
+              <a class="nav-link">关于本博客</a>
+            </li> -->
             <!-- <li class="nav-item">
               <a class="nav-link">开发杂谈</a>
             </li> -->
-            <li class="nav-item dropdown btn-group">
-              <a class="nav-link dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">资料库</a>
-              <div class="dropdown-menu dropdown" aria-labelledby="dropdownMenu1">
-                <a class="dropdown-item">文博</a>
-                <a class="dropdown-item">历史资料</a>
-                <a class="dropdown-item">听力/作业/其他</a>
-              </div>
-            </li>
+
           </ul>
-          <form class="form-inline waves-effect waves-light">
+          <!-- <form class="form-inline waves-effect waves-light">
             <input class="form-control" type="text" placeholder="Search">
-          </form>
+          </form> -->
           <ul class='nav navbar-nav navbar-right'>
             {% if current_user.is_authenticated %}
-              <li class="nav-item nav-link"><a href="{{ url_for('auth.logout') }}"><i class="fa fa-sign-out" aria-hidden="true"></i> 退出</a></li>
-              <li class="nav-item nav-link"><a href="{{ url_for('main.edit') }}">写作</a></li>
+              <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav1" aria-controls="navbarNav1" aria-expanded="false" aria-label="Toggle navigation">
+                          <span class="navbar-toggler-icon"></span>
+                      </button>
+                  <li class="nav-item dropdown btn-group">
+                    <a class="nav-link dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ current_user.username }}</a>
+                    <div class="dropdown-menu dropdown" aria-labelledby="dropdownMenu1">
+                      <a class="dropdown-item" href="{{ url_for('main.edit') }}"><i class="fa fa-pencil" aria-hidden="true"></i> 写博客</a>
+                      <a class="dropdown-item" href="{{ url_for('auth.logout') }}"><i class="fa fa-sign-out" aria-hidden="true"></i> 退出</a>
+                    </div>
+                  </li>
             {% else %}
               <li class="nav-item nav-link"><a href="{{ url_for('auth.login') }}"><i class="fa fa-sign-in" aria-hidden="true"></i> 登录</a></li>
             {% endif %}
@@ -215,6 +219,7 @@
   <!--/.Footer-->
 
 
+  {% block scripts %}
   <!-- SCRIPTS -->
 
   <!-- JQuery -->
@@ -232,6 +237,8 @@
   <script>
     new WOW().init();
   </script>
+
+  {% endblock %}
 
   {{ moment.include_moment() }}
 

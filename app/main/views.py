@@ -4,7 +4,7 @@ from flask_login import current_user
 from flask_sqlalchemy import Pagination
 
 from . import main
-from .forms import TryFrom, PostForm
+from .forms import TryFrom, PostForm, UploadForm
 from .. import db
 from ..models import User, Permission, Post
 from ..decorators import admin_required
@@ -40,10 +40,12 @@ def edit():
         return redirect(url_for('main.index'))
     return render_template('edit.html.j2', form=form)
 
+
 @main.route('/post/<int:id>')
 def post(id):
-    post=Post.query.get_or_404(id)
+    post = Post.query.get_or_404(id)
     return render_template('post.html.j2', post=post)
+
 
 @main.route('/try', methods=['GET', 'POST'])
 def TryWTF():
@@ -67,3 +69,30 @@ def TryWTF():
                            form=form, name=session.get('name'),
                            known=session.get('known', False),
                            current_time=datetime.utcnow())
+
+ALLOWED_EXTENSIONS = set(['txt','md'])
+
+@main.route('/upload', methods=['GET', 'POST'])
+def upload():
+    form = UploadForm()
+    if request.method=='POST':
+        file = request.files['markdown_file']
+        md=''
+        if file and allowed_file(file.filename):
+            with open(file, 'r') as f:
+                md=f.read()
+        post = Post(body=md,
+                    title=form.main_title.data,
+                    second_title=form.second_title.data,
+                    img=form.img.data,
+                    first_look=form.first_look.data,
+                    author=current_user._get_current_object())
+        db.session.add(post)
+        db.session.commit()
+        flash('文章已经提交')
+        return redirect(url_for('main.index'))
+    return render_template('upload.html.j2',form=form)
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS

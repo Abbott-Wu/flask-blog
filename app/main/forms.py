@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, TextAreaField
+from wtforms import StringField, SubmitField, TextAreaField, FileField
 from wtforms.validators import Required
 
 
@@ -16,3 +16,6 @@ class PostForm(FlaskForm):
     first_look = TextAreaField('文章预览')
     body = TextAreaField('文章内容')
     submit = SubmitField('提交')
+
+class UploadForm(PostForm):
+    markdown_file= FileField('markdown文件')

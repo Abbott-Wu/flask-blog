@@ -1,62 +1,11 @@
-{% extends "base_with_sidebar.html.j2" %}
-{% block title %}AbbottWu's Blog{% endblock %}
-{% block main2 %}
-{% import "_macros.html.j2" as macros %}
-<!--Main column-->
-<!-- <div class="row"> -->
-
-  <!--Main column-->
-  <!-- <div class="col-lg-8"> -->
-    <!-- {% if current_user.is_authenticated %}
-      <h1>{{current_user.username}}</h1>
-    {% else %}
-      <h1>stranger</h1>
-    {% endif %} -->
-
-    {% for post in posts %}
-    <!--Post-->
-    <div class="post-wrapper wow fadeIn" data-wow-delay="0.2s">
-      <!--Post data-->
-      <h1 class="h1-responsive">{{ post.title }}<small class="text-muted">{{ post.second_title }}</small></h1>
-      <h5>作者<a href="">{{ post.author.username }}</a>, {{ moment(post.timestamp).fromNow() }}</h5>
-
-      <br>
-      {% if post.img %}
-      <!--Featured image -->
-      <div class="view overlay hm-white-light z-depth-1-half">
-        <img src={{ post.img }} class="img-fluid " alt="">
-        <a href="{{ url_for('main.post', id=post.id) }}">
-          <div class="mask">
-          </div>
-        </a>
-      </div>
-
-      <br>
-      {% endif %}
-
-      <!--Post excerpt-->
-      <p>{{ post.first_look }}</p>
-
-      <!--"Read more" button-->
-      <a href="{{ url_for('main.post', id=post.id) }}" class="btn btn-info">Read more</a>
-    </div>
-    <br><hr>
-    <!--/.Post-->
-    {% endfor %}
-<!------------------------------------------------------------------------------------->
-
-    <!--分页按钮-->
-    {% if pagination%}
-    <nav>
-      {{ macros.pagination_widget(pagination, 'main.index')}}
-    </nav>
-    {% endif %}
-    <!--/.分页-->
-
-  <!-- </div> -->
-
-  <!--Sidebar-->
-  <!-- <div class="col-lg-4">
+{% extends "base.html.j2" %}
+{% block main %}
+<div class="row">
+  <div class="col-lg-8">
+    {% block main2 %}
+    {% endblock %}
+  </div>
+  <div class="col-lg-4">
     <div class="widget-wrapper wow fadeIn" data-wow-delay="0.2s">
       <div class="card hoverable ">
         <div class="card-image">
@@ -103,7 +52,6 @@
       </div>
     </div>
 
-  </div> -->
-  <!--/.Sidebar-->
-<!-- </div> -->
+  </div>
+</div>
 {% endblock %}
