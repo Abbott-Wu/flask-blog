@@ -2,7 +2,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask import current_app
 from flask_login import UserMixin, AnonymousUserMixin
+from markdown import markdown
 from datetime import datetime
+import bleach
 from . import db, login_manager
 
 
@@ -137,6 +139,7 @@ class Post(db.Model):
     img = db.Column(db.Text)
     first_look = db.Column(db.Text)
     body = db.Column(db.Text)
+    body_html = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
@@ -158,7 +161,23 @@ class Post(db.Model):
             db.session.add(p)
             db.session.commit()
 
+    @staticmethod
+    def on_changed_body(target, value, oldvalue, initiator):
+        allowed_tag = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code',
+                       'em', 'i', 'li', 'ol', 'pre', 'strong', 'ul',
+                       'h1', 'h2', 'h3', 'h4', 'h5', 'p']
+        html = bleach.linkify(bleach.clean(
+            markdown(value, output_format='html'), tags=allowed_tag, strip=True))
+        title_new = html.split('</h1>')
+        if len(title_new) > 1 and title_new[1] != '':
+            target.title = title_new[0].split('<h1>')[1]
+            html = html.split(title_new[0] + '</h1>')[1]
+        target.body_html = html
+
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+
+db.event.listen(Post.body, 'set', Post.on_changed_body)

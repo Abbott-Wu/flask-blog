@@ -3,9 +3,15 @@
    {{ post.title }}
  {% endblock %}
  {% block main2 %}
-   <div class="col-lg-12">
-     <h1>{{ post.title }}</h1><h3>{{ post.second_title }}</h3>
-     <br><hr>
-     <p>{{ post.body }}</p>
+   <div class="container">
+     <h1>{{ post.title }}</h1><h4>{{ post.second_title }}</h4>
+     <hr>
+     <div class="post-body">
+       {% if post.body_html %}
+          {{ post.body_html | safe }}
+       {% else %}
+          {{ post.body }}
+       {% endif %}
+     </div>
    </div>
  {% endblock %}

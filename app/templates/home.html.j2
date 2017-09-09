@@ -24,7 +24,7 @@
       {% if post.img %}
       <!--Featured image -->
       <div class="view overlay hm-white-light z-depth-1-half">
-        <img src={{ post.img }} class="img-fluid " alt="">
+        <img src="{{ post.img }}" class="img-fluid " alt="">
         <a href="{{ url_for('main.post', id=post.id) }}">
           <div class="mask">
           </div>
@@ -39,6 +39,11 @@
 
       <!--"Read more" button-->
       <a href="{{ url_for('main.post', id=post.id) }}" class="btn btn-info">Read more</a>
+      {% if current_user == post.author %}
+        <a href="{{ url_for('main.edit', id=post.id) }}" class="btn btn-warning">Edit post</a>
+      {% elif current_user.is_administrator() %}
+        <a href="{{ url_for('main.edit', id=post.id) }}" class="btn btn-danger">Edit post</a>
+      {% endif %}
     </div>
     <br><hr>
     <!--/.Post-->

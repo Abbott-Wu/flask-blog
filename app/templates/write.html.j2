@@ -2,9 +2,9 @@
 <form method="POST" enctype=multipart/form-data>
   {{ form.hidden_tag() }}
   <div class="col-lg-8">
-    <h1 class="title">编辑文章</h1><h5>或者点此上传markdown文件</h5>
+    <h1 class="title">编辑文章</h1>
   </div>
-  <hr><br>
+  <hr>
   <div class="col-lg-12 md-form">
     {{ form.main_title(id="main_title",required="") }}
     {{ form.main_title.label(for="main_title") }}
@@ -28,6 +28,13 @@
   </div>
   {% endblock %}
   <br><br>
+  <div class="container-fluid" align="right">
+    {% if need != None %}      
+    <h4>{% block message %}
+      或者<a href="{{ url_for('main.upload') }}">点此</a>上传markdown文件
+    {% endblock %}</h4>
+    {% endif %}
+  </div>
   <div class="">
     {{ form.submit(class="btn btn-primary btn-lg") }}
   </div>

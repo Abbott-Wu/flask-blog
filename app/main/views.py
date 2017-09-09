@@ -1,6 +1,6 @@
 from datetime import datetime
-from flask import render_template, session, redirect, url_for, flash, current_app, request
-from flask_login import current_user
+from flask import render_template, session, redirect, url_for, flash, current_app, request, abort
+from flask_login import current_user, login_required
 from flask_sqlalchemy import Pagination
 
 from . import main
@@ -22,9 +22,9 @@ def index():
                            pagination=pagination)
 
 
-@main.route('/edit', methods=['GET', 'POST'])
+@main.route('/write', methods=['GET', 'POST'])
 @admin_required
-def edit():
+def write():
     form = PostForm()
     if current_user.can(Permission.WRITE_ARTICLES) and \
             form.validate_on_submit():
@@ -38,51 +38,22 @@ def edit():
         db.session.commit()
         flash('文章已经提交')
         return redirect(url_for('main.index'))
-    return render_template('edit.html.j2', form=form)
+    return render_template('write.html.j2', form=form)
 
 
-@main.route('/post/<int:id>')
-def post(id):
-    post = Post.query.get_or_404(id)
-    return render_template('post.html.j2', post=post)
+ALLOWED_EXTENSIONS = set(['txt', 'md'])
 
-
-@main.route('/try', methods=['GET', 'POST'])
-def TryWTF():
-    form = TryFrom()
-    if form.validate_on_submit():
-        user = User.query.filter_by(username=form.name.data).first()
-        if user:
-            session['known'] = True
-        else:
-            user = User(username=form.name.data)
-            db.session.add(user)
-            db.session.commit()
-            session['known'] = False
-            if current_app.config['FLASKY_ADMIN']:
-                send_email(current_app.config['FLASKY_ADMIN'],
-                           'New User', 'mail/new_user', user=user)
-        session['name'] = form.name.data
-        form.name.data = ''
-        return redirect(url_for('main.TryWTF'))
-    return render_template('flask-wtfTry.html.j2',
-                           form=form, name=session.get('name'),
-                           known=session.get('known', False),
-                           current_time=datetime.utcnow())
-
-ALLOWED_EXTENSIONS = set(['txt','md'])
 
 @main.route('/upload', methods=['GET', 'POST'])
 def upload():
     form = UploadForm()
-    if request.method=='POST':
+    if request.method == 'POST':
         file = request.files['markdown_file']
-        md=''
+        md = ''
         if file and allowed_file(file.filename):
-            with open(file, 'r') as f:
-                md=f.read()
-        post = Post(body=md,
-                    title=form.main_title.data,
+            md = file.read()
+        post = Post(title=form.main_title.data,
+                    body=bytes.decode(md),
                     second_title=form.second_title.data,
                     img=form.img.data,
                     first_look=form.first_look.data,
@@ -91,7 +62,40 @@ def upload():
         db.session.commit()
         flash('文章已经提交')
         return redirect(url_for('main.index'))
-    return render_template('upload.html.j2',form=form)
+    return render_template('upload.html.j2', form=form)
+
+
+@main.route('/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit(id):
+    post = Post.query.get_or_404(id)
+    form = PostForm()
+    if current_user.can(Permission.ADMINISTER) and \
+            current_user != post.author:
+        abort(403)
+    if form.validate_on_submit():
+        post.title = form.main_title.data
+        post.second_title = form.second_title.data
+        post.first_look = form.first_look.data
+        post.img = form.img.data
+        post.body = form.body.data
+        db.session.add(post)
+        db.session.commit()
+        flash('文章已经提交')
+        return redirect(url_for('main.post', id=post.id))
+    form.main_title.data = post.title
+    form.second_title.data = post.second_title
+    form.first_look.data = post.first_look
+    form.img.data = post.img
+    form.body.data = post.body
+    return render_template('write.html.j2', form=form, need=None)
+
+
+@main.route('/post/<int:id>')
+def post(id):
+    post = Post.query.get_or_404(id)
+    return render_template('post.html.j2', post=post)
+
 
 def allowed_file(filename):
     return '.' in filename and \

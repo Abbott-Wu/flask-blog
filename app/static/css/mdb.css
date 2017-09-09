@@ -1,6 +1,6 @@
 /*!
  * Material Design for Bootstrap 4
- * Version: MDB FREE 4.3.0 
+ * Version: MDB FREE 4.3.0
  *
  *
  * Copyright: Material Design for Bootstrap
@@ -2030,11 +2030,11 @@ a {
   a:hover, a:focus {
     text-decoration: none; }
 
-ul {
+/*ul {
   padding: 0;
   list-style-type: none; }
   ul li {
-    list-style-type: none; }
+    list-style-type: none; }*/
 
 .jumbotron,
 .card,
@@ -2409,9 +2409,12 @@ p.lead {
 
 blockquote p {
   font-size: 0.9rem;
+  padding: 0.5rem 1rem;
   padding-left: 2rem;
   padding-top: 1rem;
-  padding-bottom: 1rem; }
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  border-left: 0.25rem solid #eceeef;}
 
 /* Responsive Headings */
 /* Extra Small Devices, Phones */
@@ -4875,11 +4878,11 @@ blockquote p {
 
 /*!
  * Waves v0.7.5
- * http://fian.my.id/Waves 
- * 
- * Copyright 2014-2016 Alfiana E. Sibuea and other contributors 
- * Released under the MIT license 
- * https://github.com/fians/Waves/blob/master/LICENSE 
+ * http://fian.my.id/Waves
+ *
+ * Copyright 2014-2016 Alfiana E. Sibuea and other contributors
+ * Released under the MIT license
+ * https://github.com/fians/Waves/blob/master/LICENSE
  */
 .waves-effect {
   position: relative;
@@ -5025,10 +5028,10 @@ blockquote p {
   height: 100%; }
   .flex-center p {
     margin: 0; }
-  .flex-center ul {
+  /*.flex-center ul {
     text-align: center; }
     .flex-center ul li {
-      margin-bottom: 1rem; }
+      margin-bottom: 1rem; }*/
 
 .vertical-center {
   position: relative;
@@ -5044,8 +5047,8 @@ blockquote p {
   max-width: 100%;
   height: auto; }
 
-.inline-ul > li {
-  display: inline; }
+/*.inline-ul > li {
+  display: inline; }*/
 
 .list-inline-div > div {
   display: inline-block; }
