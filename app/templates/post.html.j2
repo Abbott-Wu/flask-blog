@@ -2,6 +2,13 @@
  {% block title %}
    {{ post.title }}
  {% endblock %}
+ {% block css %}
+  {{ super() }}
+   p{
+     margin:20px;
+     padding:10px;
+   }
+ {% endblock %}
  {% block main2 %}
    <div class="container">
      <h1>{{ post.title }}</h1><h4>{{ post.second_title }}</h4>

@@ -24,7 +24,7 @@
       {% if post.img %}
       <!--Featured image -->
       <div class="view overlay hm-white-light z-depth-1-half">
-        <img src="{{ post.img }}" class="img-fluid " alt="">
+        <img src="{{ post.img }}" class="img-responsive" alt="" width="750">
         <a href="{{ url_for('main.post', id=post.id) }}">
           <div class="mask">
           </div>

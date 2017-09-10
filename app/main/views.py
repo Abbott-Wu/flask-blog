@@ -62,6 +62,7 @@ def upload():
         db.session.commit()
         flash('文章已经提交')
         return redirect(url_for('main.index'))
+    form.main_title.data='title'
     return render_template('upload.html.j2', form=form)
 
 

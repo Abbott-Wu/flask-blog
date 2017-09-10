@@ -165,9 +165,28 @@ class Post(db.Model):
     def on_changed_body(target, value, oldvalue, initiator):
         allowed_tag = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code',
                        'em', 'i', 'li', 'ol', 'pre', 'strong', 'ul',
-                       'h1', 'h2', 'h3', 'h4', 'h5', 'p']
+                       'h1', 'h2', 'h3', 'h4', 'h5', 'p', 'img', 'hr']
+        attrs = {
+            '*': ['class'],
+            'a': ['href', 'rel'],
+            'img': ['src', 'alt', 'width'],
+        }
         html = bleach.linkify(bleach.clean(
-            markdown(value, output_format='html'), tags=allowed_tag, strip=True))
+            markdown(value, output_format='html'), attributes=attrs, tags=allowed_tag, strip=True))
+        l = html.split('<img ')
+        div_f = '<div class="view overlay hm-white-light z-depth-1-half hoverable">'
+        div_l = '<div class="mask"></div></div>'
+        for i in range(0, len(l) - 1):
+            t = ''
+            y = ''
+            t = l[i] + div_f + '<img class="img-fluid" width="auto" ' + \
+                l[i + 1].split('>')[0] + '>' + div_l
+            y = l[i + 1][len(l[i + 1].split('>')[0]) + 1:]
+            l[i] = t
+            l[i + 1] = y
+        html = ''
+        for i in range(0, len(l)):
+            html += l[i]
         title_new = html.split('</h1>')
         if len(title_new) > 1 and title_new[1] != '':
             target.title = title_new[0].split('<h1>')[1]

@@ -27,7 +27,7 @@
   <!-- Template styles -->
   <style rel="stylesheet">
     /* TEMPLATE STYLES */
-
+    {% block css %}
     main {
       padding-top: 3rem;
       padding-bottom: 2rem;
@@ -48,6 +48,8 @@
       background-color: #4285F4;
       margin-top: 2rem;
     }
+    {% endblock %}
+
   </style>
   <script>
   function turnoff(obj) {
