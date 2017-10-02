@@ -1,7 +1,17 @@
-{% extends "base.html.j2" %}
+{% extends "base_with_sidebar.html.j2" %}
 {% block title %}AbbottWu's Blog{% endblock %}
 {% block main2 %}
+{% import "_macros.html.j2" as macros %}
 <!--Main column-->
+<!-- <div class="row"> -->
+
+  <!--Main column-->
+  <!-- <div class="col-lg-8"> -->
+    <!-- {% if current_user.is_authenticated %}
+      <h1>{{current_user.username}}</h1>
+    {% else %}
+      <h1>stranger</h1>
+    {% endif %} -->
 
     {% for post in posts %}
     <!--Post-->
@@ -39,6 +49,14 @@
     <!--/.Post-->
     {% endfor %}
 <!------------------------------------------------------------------------------------->
+
+    <!--分页按钮-->
+    {% if pagination%}
+    <nav>
+      {{ macros.pagination_widget(pagination, 'main.index')}}
+    </nav>
+    {% endif %}
+    <!--/.分页-->
 
   <!-- </div> -->
 

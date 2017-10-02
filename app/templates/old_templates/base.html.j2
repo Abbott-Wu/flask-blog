@@ -1,0 +1,251 @@
+{% extends "bootstrap/base.html" %} {% block html %}
+<!DOCTYPE html>
+<html lang="zh_CN">
+
+<head>
+  {% block head %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+  <title>{% block title %}{% endblock %}</title>
+
+  <!-- Font google -->
+  <link href="https://fonts.cat.net/css?family=Noto+Sans|Roboto" rel="stylesheet">
+
+  <!-- Font awesome -->
+  <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <!-- Bootstrap core CSS -->
+  <link href='{{ url_for ("static", filename = "css/bootstrap.min.css") }}' rel="stylesheet">
+
+  <!-- Material Design Bootstrap -->
+  <link href='{{ url_for ("static" , filename = "css/mdb.css") }}' rel="stylesheet">
+
+  <link href='{{ url_for ( "static" , filename = "css/style.css") }}' rel="stylesheet">
+
+  <!-- Template styles -->
+  <style rel="stylesheet">
+    /* TEMPLATE STYLES */
+    {% block css %}
+    main {
+      padding-top: 3rem;
+      padding-bottom: 2rem;
+    }
+
+    .widget-wrapper {
+      padding-bottom: 2rem;
+      border-bottom: 1px solid #e0e0e0;
+      margin-bottom: 2rem;
+    }
+
+
+    .navbar {
+      background-color: #4285F4;
+    }
+
+    footer.page-footer {
+      background-color: #4285F4;
+      margin-top: 2rem;
+    }
+    {% endblock %}
+
+  </style>
+  <script>
+  function turnoff(obj) {
+    document.getElementById(obj).style.display = "none";
+  }
+  </script>
+  {% endblock %}
+  <link rel="shortcut icon" href="{{ url_for('static',filename='web_hi_res_512.ico') }}" type="image/x-icon">
+  <link rel="icon" href="{{ url_for('static',filename='web_hi_res_512.ico') }}" type="image/x-cion">
+</head>
+
+<body>
+  <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <header>
+
+    <!--Navbar-->
+    <nav class="navbar navbar-toggleable-md navbar-dark">
+      <div class="container">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav1" aria-controls="navbarNav1" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+        <a class="navbar-brand" href="{{ url_for('main.index') }}">
+                    <strong>AbbottWu的博客</strong>
+                </a>
+        <div class="collapse navbar-collapse" id="navbarNav1">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="{{ url_for('main.index') }}">主页 <span class="sr-only">(current)</span></a>
+            </li>
+            <!-- <li class="nav-item">
+              <a class="nav-link">关于本博客</a>
+            </li> -->
+            <!-- <li class="nav-item">
+              <a class="nav-link">开发杂谈</a>
+            </li> -->
+
+          </ul>
+          <!-- <form class="form-inline waves-effect waves-light">
+            <input class="form-control" type="text" placeholder="Search">
+          </form> -->
+          <ul class='nav navbar-nav navbar-right'>
+            {% if current_user.is_authenticated %}
+              <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav1" aria-controls="navbarNav1" aria-expanded="false" aria-label="Toggle navigation">
+                          <span class="navbar-toggler-icon"></span>
+                      </button>
+                  <li class="nav-item dropdown btn-group">
+                    <a class="nav-link dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ current_user.username }}</a>
+                    <div class="dropdown-menu dropdown" aria-labelledby="dropdownMenu1">
+                      <a class="dropdown-item" href="{{ url_for('main.write') }}"><i class="fa fa-pencil" aria-hidden="true"></i> 写博客</a>
+                      <a class="dropdown-item" href="{{ url_for('main.upload') }}"><i class="fa fa-upload" aria-hidden="true"></i>  上传</a>
+                      <a class="dropdown-item" href="{{ url_for('auth.logout') }}"><i class="fa fa-sign-out" aria-hidden="true"></i> 退出</a>
+                    </div>
+                  </li>
+            {% else %}
+              <li class="nav-item nav-link"><a href="{{ url_for('auth.login') }}"><i class="fa fa-sign-in" aria-hidden="true"></i> 登录</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!--/.Navbar-->
+
+  </header>
+
+  <main>
+
+    <!--Main layout-->
+    <div class="container">
+      {% for message in get_flashed_messages() %}
+      <div id="flashcard" class="card card-danger text-center z-depth-2">
+        <div class="card-block">
+          <p class="white-text">{{ message }}</p><button type="button" class="btn btn-primary" onclick="javascript:turnoff('flashcard')">关闭</button>
+        </div>
+      </div>
+      {% endfor %}
+      <br>
+      {% block main %} {% endblock %}
+    </div>
+    <!--/.Main layout-->
+
+  </main>
+
+  <!--Footer-->
+  <footer class="page-footer center-on-small-only">
+
+    <!--Footer Links-->
+    <div class="container-fluid">
+      <div class="row">
+
+        <!--First column-->
+        <!-- <div class="col-md-3 offset-lg-1 hidden-lg-down"> -->
+        <div class="col-md-3 offset-lg-1 hidden-lg-down">
+          <h5 class="title">关于本站</h5>
+          <p>本站采用谷歌的Material Design设计风格，利用flask，python构建后端，bootstrap和material design for Bootstrap 构建前端</p>
+
+          <!--<p>Material Design for Bootstrap (MDB) is a powerful Material Design UI KIT for most popular HTML, CSS, and JS framework - Bootstrap.</p>-->
+        </div>
+        <!--/.First column-->
+
+        <hr class="hidden-md-up">
+
+        <!--Second column-->
+        <div class="col-lg-2 col-md-4 offset-lg-1">
+          <h5 class="title">开发笔记</h5>
+          <ul>
+            <li><a href="#!">第一天</a></li>
+            <li><a href="#!">第二天</a></li>
+            <li><a href="#!">第三天</a></li>
+            <li><a href="#!">第四天</a></li>
+          </ul>
+        </div>
+        <!--/.Second column-->
+
+        <hr class="hidden-md-up">
+
+        <!--Third column-->
+        <div class="col-lg-2 col-md-4">
+          <h5 class="title">没啥说的</h5>
+          <ul>
+            <li><a href="#!">Link 1</a></li>
+            <li><a href="#!">Link 2</a></li>
+            <li><a href="#!">Link 3</a></li>
+            <li><a href="#!">Link 4</a></li>
+          </ul>
+        </div>
+        <!--/.Third column-->
+
+        <hr class="hidden-md-up">
+
+        <!--Fourth column-->
+        <div class="col-lg-2 col-md-4">
+          <h5 class="title">先这样吧</h5>
+          <ul>
+            <li><a href="#!">Link 1</a></li>
+            <li><a href="#!">Link 2</a></li>
+            <li><a href="#!">Link 3</a></li>
+            <li><a href="#!">Link 4</a></li>
+          </ul>
+        </div>
+        <!--/.Fourth column-->
+
+      </div>
+    </div>
+    <!--/.Footer Links-->
+
+    <!--<hr>-->
+
+    <!--Call to action-->
+    <!--<div class="call-to-action">
+            <h4>Material Design for Bootstrap</h4>
+            <ul>
+                <li>
+                    <h5>Get our UI KIT for free</h5></li>
+                <li><a target="_blank" href="http://mdbootstrap.com/getting-started/" class="btn btn-info" rel="nofollow">Sign up!</a></li>
+                <li><a target="_blank" href="http://mdbootstrap.com/material-design-for-bootstrap/" class="btn btn-default" rel="nofollow">Learn more</a></li>
+            </ul>
+        </div>-->
+    <!--/.Call to action-->
+
+    <!--Copyright-->
+    <div class="footer-copyright">
+      <div class="container-fluid">
+        © 2015 Copyright: <a href="http://www.MDBootstrap.com"> MDBootstrap.com </a>
+
+      </div>
+    </div>
+    <!--/.Copyright-->
+
+  </footer>
+  <!--/.Footer-->
+
+
+  {% block scripts %}
+  <!-- SCRIPTS -->
+
+  <!-- JQuery -->
+  <script type="text/javascript" src="{{ url_for('static',filename='js/jquery-2.2.3.min.js')}}"></script>
+
+  <!-- Bootstrap tooltips -->
+  <script type="text/javascript" src="{{ url_for('static',filename='js/tether.min.js')}}"></script>
+
+  <!-- Bootstrap core JavaScript -->
+  <script type="text/javascript" src="{{ url_for('static',filename='js/bootstrap.min.js')}}"></script>
+
+  <!-- MDB core JavaScript -->
+  <script type="text/javascript" src="{{ url_for('static',filename='js/mdb.min.js')}}"></script>
+
+  <script>
+    new WOW().init();
+  </script>
+
+  {% endblock %}
+
+  {{ moment.include_moment() }}
+
+</body>
+
+</html>
+{% endblock %}

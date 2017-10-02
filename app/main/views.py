@@ -18,8 +18,7 @@ def index():
         error_out=False)
     posts = pagination.items
     return render_template('home.html.j2', posts=posts,
-                           current_time=datetime.utcnow(),
-                           pagination=pagination)
+                           current_time=datetime.utcnow())
 
 
 @main.route('/write', methods=['GET', 'POST'])
