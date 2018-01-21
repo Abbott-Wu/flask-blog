@@ -18,7 +18,8 @@ def index():
         error_out=False)
     posts = pagination.items
     return render_template('home.html.j2', posts=posts,
-                           current_time=datetime.utcnow())
+                           current_time=datetime.utcnow(),
+                           pagination=pagination)
 
 
 @main.route('/write', methods=['GET', 'POST'])
@@ -44,6 +45,7 @@ ALLOWED_EXTENSIONS = set(['txt', 'md'])
 
 
 @main.route('/upload', methods=['GET', 'POST'])
+@admin_required
 def upload():
     form = UploadForm()
     if request.method == 'POST':

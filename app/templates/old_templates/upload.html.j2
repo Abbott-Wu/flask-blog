@@ -1,9 +1,0 @@
-{% extends "write.html.j2" %}
-{% block bodyWay %}
-<div class="col-lg-12 md-form">
-  {{ form.markdown_file(accept=".md",required="") }}
-</div>
-{% endblock %}
-{% block message %}
-  或者<a href="{{ url_for('main.write') }}">点此</a>编辑文章
-{% endblock %}

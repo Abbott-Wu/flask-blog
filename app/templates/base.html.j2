@@ -4,68 +4,114 @@
 <head>
   <meta charset="utf-8">
   <title>{% block title %}{% endblock %}</title>
-  <link rel="stylesheet" href='{{ url_for("static", filename = "css/mdui.min.css") }}'>
-  <script src="js/mdui.min.js"></script>
+  <link rel="stylesheet" href='{{ url_for("static", filename = "css/mdui.css") }}'>
+  <script type="text/javascript" src="{{ url_for('static', filename = 'js/mdui.min.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',filename='js/jquery.min.js')}}"></script>
+  {{ moment.include_moment(local_js="/static/js/moment.min.js") }}
+  {{ moment.lang("zh-CN") }}
+  {% for message in get_flashed_messages() %}
+  <script type="text/javascript">
+    var $$ = mdui.JQ;
+    window.onload = function() {
+      mdui.snackbar({
+        message: '{{ message }}',
+        position: 'right-top',
+        closeOnOutsideClick: false,
+        // timeout: 2000
+      })
+      ;
+    }
+  </script>
+  {% endfor %}
 </head>
 
-<body class="mdui-theme-primary-blue">
+<body class="mdui-theme-primary-blue mdui-theme-accent-deep-purple">
 
   <div class="mdui-appbar">
     <div class="mdui-toolbar mdui-color-theme mdui-p-x-5">
-      <a href="javascript:;" class="mdui-typo-headline">Blog</a>
+      <a href="{{ url_for('main.index') }}" class="mdui-typo-headline">Blog</a>
       <a href="#" class="mdui-typo-subheading">关于</a>
       <a href="#" class="mdui-typo-subheading">内容</a>
+
       <div class="mdui-toolbar-spacer"></div>
+
       <a href="javascript:;" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon material-icons">search</i></a>
       <a href="javascript:;" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon material-icons">refresh</i></a>
-      <a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-menu=" {target: '#example-attr'} "><i class="mdui-icon material-icons">more_vert</i></a>
-      <ul class="mdui-menu " id="example-attr">
+      {% if current_user.is_authenticated %}
+      <button class="mdui-btn mdui-btn-icon" mdui-menu=" {target: '#example-attr'} "><i class="mdui-icon material-icons">more_vert</i></button>
+      <ul class="mdui-menu" id="example-attr">
         <li class="mdui-menu-item">
-          <a href="javascript:;" class="mdui-ripple">Refresh</a>
+          <a href="{{ url_for('main.write') }}" class="mdui-ripple">写博客</a>
         </li>
         <li class="mdui-menu-item">
-          <a href="javascript:;">Help & feedback</a>
+          <a href="{{ url_for('main.upload') }}">上传博客</a>
         </li>
-        <li class="mdui-menu-item">
+        <!-- <li class="mdui-menu-item">
           <a href="javascript:;" class="mdui-ripple">Settings</a>
-        </li>
+        </li> -->
         <li class="mdui-divider"></li>
         <li class="mdui-menu-item">
-          <a href="javascript:;" class="mdui-ripple">Sign out</a>
+          <a href="{{ url_for('auth.logout') }}" class="mdui-ripple">登出</a>
         </li>
       </ul>
+      {% else %}
+      <a href="{{ url_for('auth.login') }}" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon material-icons">input</i></a>
+      {% endif %}
     </div>
   </div>
+
   <div class="mdui-row mdui-typo mdui-container mdui-center">
-    <div class="mdui-col-lg-8 mdui-col-md-7">
+    {% block container %}
+    <div class="mdui-col-lg-8 mdui-col-md-9">
       <div class="mdui-container">
         {% block main %}
         {% endblock %}
       </div>
     </div>
-    <div class="mdui-col-lg-4 mdui-col-md-5">
+
+    <div class="mdui-col-lg-4 mdui-col-md-3">
       <br>
-      <div class="mdui-card">
-        <div class="mdui-card-media">
-          <img src="https://drivenlocal.com/wp-content/uploads/2015/10/Material-design.jpg" />
-          <div class="mdui-card-media-covered">
-            <div class="mdui-card-primary">
-              <div class="mdui-card-primary-title">Title</div>
-              <div class="mdui-card-primary-subtitle">Subtitle</div>
+      <div class="mdui-col-md-12 mdui-col-sm-6 mdui-m-b-4">
+        <div class="mdui-card mdui-hoverable">
+          <div class="mdui-card-media">
+            <img src="{{ url_for('static',filename = 'img/sidebar/MD.jpg') }}"/>
+            <div class="mdui-card-media-covered mdui-card-media-covered-gradient">
+              <div class="mdui-card-primary">
+                <div class="mdui-card-primary-title">Material Design</div>
+              </div>
             </div>
           </div>
+          <div class="mdui-card-content">
+            质感设计（英语：Material Design），是由Google开发的设计语言 。
+            扩展于Google即时的“卡片”设计，材质设计基于网格的布局、响应动画与过渡、填充、深度效果（如光线和阴影）。
+            设计师马迪亚斯·杜阿尔特解释说：“与真正的纸张不同，我们的数字材质可以智能地扩大和变形。材质具有实体的表面和边缘。
+            接缝和阴影表明组件的含义。“Google指出他们的新设计语言基于纸张和油墨。”
+          </div>
         </div>
-        <div class="mdui-card-actions">
-          <button class="mdui-btn mdui-ripple">action 1</button>
-          <button class="mdui-btn mdui-ripple">action 2</button>
+      </div>
+      <div class="mdui-col-sm-6 mdui-col-md-12">
+        <div class="mdui-card mdui-hoverable">
+          <div class="mdui-card-media">
+            <img src="{{ url_for('static',filename = 'img/sidebar/MD.jpg') }}" />
+            <div class="mdui-card-media-covered mdui-card-media-covered-gradient">
+              <div class="mdui-card-primary">
+                <div class="mdui-card-primary-title">Python</div>
+              </div>
+            </div>
+          </div>
+          <div class="mdui-card-content">
+            Python（英国发音：/ˈpaɪθən/ 美国发音：/ˈpaɪθɑːn/），是一种面向对象、直译式的电脑程序语言。
+            它包含了一组功能完备的标准库，能够轻松完成很多常见的任务。同时他也能很好的应付许多需要抽象逻辑及
+            复杂任务的场地。它经常被当作脚本语言用于处理系统管理任务和网络程序编写，然而它也非常适合完成各
+            种高级任务。Python虚拟机本身几乎可以在<strong>所有</strong>的操作系统中运行。
+          </div>
         </div>
       </div>
     </div>
+    {% endblock %}
   </div>
-  <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-  <br><br><br><br><br><br><br><br><br>
 
-  <div class="mdui-p-a-3 mdui-shadow-5 mdui-container-fluid mdui-color-theme">
+  <div class="mdui-p-a-3 mdui-m-t-4 mdui-shadow-5 mdui-container-fluid mdui-color-theme">
     <div class="mdui-container mdui-center mdui-row">
       <div class="mdui-col-lg-7 mdui-col-md-6 mdui-col-xs-4">
         <h3>sxu</h3>
@@ -85,6 +131,7 @@
       </div>
     </div>
   </div>
+
 
 </body>
 

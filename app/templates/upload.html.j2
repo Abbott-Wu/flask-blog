@@ -1,0 +1,10 @@
+{% extends "write.html.j2" %}
+{% block bodyWay %}
+<div class="mdui-container-fluid mdui-m-t-3">
+  <label class="mdui-btn mdui-btn-raised mdui-color-pink-accent" for="xFile">上传文件</label>
+  {{ form.markdown_file(id="xFile",accept=".md",required="",style="position:absolute;clip:rect(0 0 0 0);") }}
+</div>
+{% endblock %}
+{% block message %}
+  或者<a href="{{ url_for('main.write') }}">点此</a>编辑文章
+{% endblock %}

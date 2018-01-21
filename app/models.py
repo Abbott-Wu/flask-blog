@@ -200,3 +200,4 @@ def load_user(user_id):
 
 
 db.event.listen(Post.body, 'set', Post.on_changed_body)
+login_manager.login_message = u"请先登录再尝试."

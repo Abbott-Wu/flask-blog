@@ -1,0 +1,44 @@
+ {% extends "base.html.j2" %}
+ {% block title %} 编辑文章 {% endblock %}
+ {% block container %}
+<form method="POST" enctype=multipart/form-data>
+  {{ form.hidden_tag() }}
+  <div class="mdui-container">
+      <h1 class="title">编辑文章</h1>
+    <hr>
+    <div class="mdui-textfield mdui-textfield-floating-label">
+      {{ form.main_title.label(class="mdui-textfield-label") }}
+      {{ form.main_title(class="mdui-textfield-input",required="") }}
+    </div>
+    <div class="mdui-textfield mdui-textfield-floating-label">
+      {{ form.second_title.label(class="mdui-textfield-label") }}
+      {{ form.second_title(class="mdui-textfield-input") }}
+    </div>
+    <div class="mdui-textfield mdui-textfield-floating-label">
+      {{ form.img.label(class="mdui-textfield-label")}}
+      {{ form.img(class="mdui-textfield-input") }}
+    </div>
+    <div class="mdui-textfield">
+      {{ form.first_look.label(class="mdui-textfield-label") }}
+      {{ form.first_look(class="mdui-textfield-input",required="") }}
+    </div>
+    {% block bodyWay %}
+    <div class="mdui-textfield">
+      {{ form.body.label(class="mdui-textfield-label") }}
+      {{ form.body(id="form_body",class="mdui-textfield-input",required="") }}
+    </div>
+    {% endblock %}
+    <br><br>
+    <div class="mdui-container-fluid" align="right">
+      {% if need != None %}
+      <h4>{% block message %}
+        或者<a href="{{ url_for('main.upload') }}">点此</a>上传markdown文件
+        {% endblock %}</h4>
+        {% endif %}
+      </div>
+      <div class="mdui-container-fluid mdui-float-right">
+        {{ form.submit(class="mdui-btn mdui-btn-raised mdui-color-theme-accent") }}
+      </div>
+  </div>
+</form>
+{% endblock %}

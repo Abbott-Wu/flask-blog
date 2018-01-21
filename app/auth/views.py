@@ -16,6 +16,7 @@ def login():
             login_user(user, form.remember_me.data)
             return redirect(request.args.get('next') or url_for('main.index'))
         flash('密码或用户名错误')
+        return redirect(url_for('auth.login'))
     return render_template('auth/login.html.j2', current_user=current_user, form=form)
 
 

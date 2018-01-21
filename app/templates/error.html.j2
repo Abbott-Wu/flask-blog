@@ -1,0 +1,18 @@
+{% extends "base.html.j2" %}
+{% block title %}{% endblock %}
+{% block main %}
+<div class='mdui-container'>
+    <h1>{% block massage %}{% endblock %}</h1>
+    <br>
+    <hr>
+    <br>
+</div>
+
+
+<div class='mdui-container'>
+  <h2>您可以点击<strong><a href="{{ url_for('main.index') }}">这里</a></strong>返回主页</h2>
+  <br>
+  <br>
+</div>
+
+{% endblock %}
