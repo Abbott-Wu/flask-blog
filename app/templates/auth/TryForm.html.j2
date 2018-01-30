@@ -1,0 +1,38 @@
+{% extends "base.html.j2" %}
+
+{% block title %}
+  trying now
+{% endblock %}
+
+{% block container %}
+  <form method="post">
+    {{ form.hidden_tag() }}
+    <div class="mdui-contaier">
+      <div class="mdui-textfield mdui-textfield-floating-label">
+        <i class="mdui-icon material-icons">email</i>
+        {{ form.email.label(class="mdui-textfield-label")}}
+        {{ form.email(class="mdui-textfield-input") }}
+      </div>
+      <div class="mdui-container mdui-m-y-4">
+        {{ form.submit(class="mdui-btn mdui-btn-raised mdui-btn-block mdui-color-theme-accent") }}
+      </div>
+      {% if form.email.errors %}
+        {% for error in form.email.errors %}
+          {{ error }}
+        {% endfor %}
+      {% endif %}
+    </div>
+  </form>
+  <div class="mdui-contaier">
+    <button id="try_button" class="mdui-btn mdui-btn-raised mdui-color-theme-accent">123</button>
+  </div>
+  <script type="text/javascript">
+  $("#try_button").click(function(){
+    $.cookie('primary_color', 'red', { expires: 7, path:'/'  });
+    $.cookie('accent_color', 'orange',{ expires: 7, path:'/' });
+    var primary_color = $.cookie('primary_color');
+    var accent_color = $.cookie('accent_color')
+      $("#window").attr("class","mdui-theme-primary-" + primary_color + " mdui-theme-accent-"+ accent_color);
+    });
+  </script>
+{% endblock %}

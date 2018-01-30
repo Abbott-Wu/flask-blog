@@ -69,6 +69,7 @@ def upload():
 
 @main.route('/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
+@admin_required
 def edit(id):
     post = Post.query.get_or_404(id)
     form = PostForm()
@@ -91,7 +92,6 @@ def edit(id):
     form.img.data = post.img
     form.body.data = post.body
     return render_template('write.html.j2', form=form, need=None)
-
 
 @main.route('/post/<int:id>')
 def post(id):

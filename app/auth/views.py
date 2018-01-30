@@ -2,7 +2,7 @@ from flask import render_template, redirect, request, url_for, flash, session
 from flask_login import current_user, login_user, login_required, logout_user
 from . import auth
 from ..models import User
-from .forms import LoginForm, RegistrationForm
+from .forms import LoginForm, RegistrationForm,TryForm
 from .. import db
 from ..email import send_email
 
@@ -32,26 +32,16 @@ def logout():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        if form.password.data != form.password2.data:
-            flash('密码不相等，请重新输入')
-            return redirect(url_for('auth.register'))
-        elif User.query.filter_by(email=form.email.data).first():
-            flash('邮箱已注册，请重新输入')
-            return redirect(url_for('auth.register'))
-        elif User.query.filter_by(username=form.username.data).first():
-            flash('用户名已注册，请重新输入')
-            return redirect(url_for('auth.register'))
-        else:
-            user = User(email=form.email.data,
-                        username=form.username.data,
-                        password=form.password.data)
-            db.session.add(user)
-            db.session.commit()
-            token = user.generate_confirmation_token()
-            send_email(user.email, '确认你的账户', 'auth/email/confirm',
-                       user=user, token=token)
-            flash('你现在可以登录了，有一封邮件已经邮寄到你的邮箱了')
-            return redirect(url_for('auth.login'))
+        user = User(email=form.email.data,
+                    username=form.username.data,
+                    password=form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        token = user.generate_confirmation_token()
+        send_email(user.email, '确认你的账户', 'auth/email/confirm',
+                   user=user, token=token)
+        flash('你现在可以登录了，有一封邮件已经邮寄到你的邮箱了')
+        return redirect(url_for('auth.login'))
     return render_template('auth/register.html.j2', form=form)
 
 
@@ -82,6 +72,16 @@ def unconfirmed():
         return redirect(url_for('main.index'))
     return render_template('auth/unconfirmed.html.j2')
 
+@auth.route('/try',methods=['GET','POST'])
+def tryvalidators():
+    form  = TryForm()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            flash('ok')
+            return redirect(url_for('auth.tryvalidators'))
+        else:
+            flash('fail')
+    return render_template('auth/TryForm.html.j2',form=form)
 # -----------------------------------------------------------------------------
 
 

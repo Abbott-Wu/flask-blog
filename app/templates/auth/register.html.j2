@@ -9,69 +9,35 @@
     <div class="mdui-textfield mdui-textfield-floating-label">
       <i class="mdui-icon material-icons">email</i>
       {{ form.email.label(class="mdui-textfield-label")}}
-      {{ form.email(class="mdui-textfield-input",required="",type="email",maxlength="32") }}
+      {{ form.email(class="mdui-textfield-input") }}
+    </div>
+
+    <div class="mdui-textfield mdui-textfield-floating-label">
+      <i class="mdui-icon material-icons">account_circle</i>
+      {{ form.username.label(class="mdui-textfield-label")}}
+      {{ form.username(class="mdui-textfield-input") }}
+    </div>
+
+    <div class="mdui-textfield mdui-textfield-floating-label">
+      <i class="mdui-icon material-icons">lock_outline</i>
+      {{ form.password.label(class="mdui-textfield-label")}}
+      {{ form.password(class="mdui-textfield-input") }}
     </div>
 
     <div class="mdui-textfield mdui-textfield-floating-label">
       <i class="mdui-icon material-icons">lock</i>
-      {{ form.password.label(class="mdui-textfield-label")}}
-      {{ form.password(class="mdui-textfield-input",required="",type="password",maxlength="32") }}
+      {{ form.confirm.label(class="mdui-textfield-label")}}
+      {{ form.confirm(class="mdui-textfield-input") }}
     </div>
-    <div class="mdui-contaier mdui-p-l-2 mdui-m-l-5 mdui-m-y-2">
-      <label class="mdui-checkbox">
-        {{ form.remember_me(class=" mdui-m-l-2 checkbox") }} 使我保持登录
-        <i class="mdui-checkbox-icon"></i>
-      </label>
-    </div>
+
     <div class="mdui-container mdui-m-y-4">
       {{ form.submit(class="mdui-btn mdui-btn-raised mdui-btn-block mdui-color-theme-accent") }}
     </div>
 
     <div class="mdui-container-fluid mdui-float-right mdui-m-t-2 mdui-m-b-5 mdui-p-b-5">
-      <p>新用户？ 请点击这里 <a href="{{ url_for('auth.register') }}">注册</a></p>
+      <p>老用户？ 请点击这里 <a href="{{ url_for('auth.login') }}">登录</a></p>
     </div>
   </div>
 
-</form>
-
-<form method="POST">
-  {{ form.hidden_tag() }}
-  <div class="card">
-    <div class="card-block">
-      <div class="text-center form-header blue darken-4">
-        <h3><i class="fa fa-lock"></i>
-          登录</h3>
-      </div>
-
-      <div class="md-form form-group">
-        <i class="fa fa-envelope prefix"></i>
-        {{ form.email(id="form_email",class="form-control",required="",type="email",maxlength="64") }}
-        {{ form.email.label(for="form_email")}}
-      </div>
-
-      <div class="md-form form-group">
-        <i class="fa fa-envelope prefix"></i>
-        {{ form.username(id="form_username",class="form-control",required="",pattern="^\w+$",
-                         maxlength="20",title="Username should only contain lowercase letters. e.g. john") }}
-        {{ form.username.label(for="form_username")}}
-      </div>
-
-      <div class="md-form form-group">
-        <i class="fa fa-lock prefix"></i>
-        {{ form.password(id="form_password",class="form-control",required="") }}
-        {{ form.password.label(for="form_password") }}
-      </div>
-
-      <div class="md-form form-group">
-        <i class="fa fa-lock prefix"></i>
-        {{ form.password2(id="form_password2",class="form-control",required="") }}
-        {{ form.password2.label(for="form_password2") }}
-      </div>
-      <div class="md-form form-group text-center">
-        {{ form.submit(class="btn btn-primary btn-lg") }}
-      </div>
-
-    </div>
-  </div>
 </form>
 {% endblock %}
